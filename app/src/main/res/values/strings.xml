@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">BlueLight</string>
     <string name="action_settings">Settings</string>
+    <string name="choose_a_gap_role">Choose a GAP role</string>
+    <string name="central_role">Central Role</string>
+    <string name="peripheral_role">Peripheral Role</string>
+    <string name="observer_role">Observer Role</string>
+    <string name="transmitter_role">Transmitter Role</string>
+    <string name="title_activity_central">CentralActivity</string>
 </resources>
