@@ -15,8 +15,6 @@ public class CentralActivity extends AppCompatActivity {
     private Button bt_scan;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
