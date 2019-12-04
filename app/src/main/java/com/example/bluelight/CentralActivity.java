@@ -15,18 +15,20 @@ public class CentralActivity extends AppCompatActivity {
     private Button bt_scan;
 
 
-    class scanOnClickListner implements View.OnClickListener{
-        @Override
-        public void onClick(View V){
 
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_central);
         bt_scan = findViewById(R.id.scan);
+        bt_scan.setOnClickListener(new scanOnClickListner());
+    }
+    class scanOnClickListner implements View.OnClickListener{
+        @Override
+        public void onClick(View V){
+
+        }
     }
 
 }

@@ -2,22 +2,24 @@ package com.example.bluelight;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class PeripheralActivity extends AppCompatActivity {
-    private Button startAdvertisement;
+    private Button bt_startAdvertise;
+    private TextView tv_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peripheral);
-         startAdvertisement = findViewById(R.id.startAdvertisement);
+        bt_startAdvertise = findViewById(R.id.startAdvertisement);
+        tv_name = findViewById(R.id.peripheralName);
+        bt_startAdvertise.setOnClickListener(new startadvOnClickListner());
     }
 
     class startadvOnClickListner implements View.OnClickListener{
