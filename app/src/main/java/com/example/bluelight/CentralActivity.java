@@ -30,8 +30,6 @@ public class CentralActivity extends AppCompatActivity {
     private BluetoothLeScanner mBluetoothLeScanner;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
