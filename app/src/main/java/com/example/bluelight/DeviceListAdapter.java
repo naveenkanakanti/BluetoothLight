@@ -40,17 +40,19 @@ public class DeviceListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return device_list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+
+        return device_list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+
+        return position;
     }
 
     public void updateList(List<BluetoothDevice> list) {

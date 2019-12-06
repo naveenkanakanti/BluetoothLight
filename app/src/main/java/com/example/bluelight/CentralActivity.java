@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.view.LayoutInflater;
@@ -44,9 +45,10 @@ public class CentralActivity extends AppCompatActivity {
         lv_DeviceList = findViewById(R.id.deviceList);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        mDeviceList = new DeviceListAdapter(this,R.layout.device_view,deviceList);
         deviceList = new ArrayList<BluetoothDevice>();
+        mDeviceList = new DeviceListAdapter(this,R.layout.device_view,deviceList);
         lv_DeviceList.setAdapter(mDeviceList);
+        lv_DeviceList.setOnItemClickListener(mItemClickListner);
     }
 
     class scanOnClickListner implements View.OnClickListener{
@@ -74,5 +76,12 @@ public class CentralActivity extends AppCompatActivity {
     private void updatelist(){
         mDeviceList.updateList(deviceList);
     }
+
+    AdapterView.OnItemClickListener mItemClickListner = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(TAG ,"position: "+ position + "device:" + deviceList.get(position));
+        }
+    };
 
 }
