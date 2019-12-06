@@ -67,8 +67,17 @@ public class CentralActivity extends AppCompatActivity {
 
             Log.d(TAG,"scan result: " + result.getDevice().getAddress() + " rssi "
                     + result.getRssi() + " name " + result.getDevice().getName());
-            deviceList.add(result.getDevice());
-            updatelist();
+            if(result.getDevice().getName() != null){
+                if(!deviceList.contains(result.getDevice())){
+                    deviceList.add(result.getDevice());
+                    updatelist();
+                } else{
+                    Log.d(TAG,"Device already added");
+                }
+            } else{
+                Log.d(TAG,"Name is not avaialble");
+            }
+
         }
     };
 
