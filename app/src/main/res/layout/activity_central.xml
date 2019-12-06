@@ -18,10 +18,7 @@
         android:id="@+id/deviceList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/scan"
-        android:gravity="center"
-        android:baselineAligned="false"
-        tools:listitem="@layout/device_view">
+        android:layout_below="@id/scan">
 
     </ListView>
 

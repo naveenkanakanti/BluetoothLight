@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG,"Requesting BluetoothPermission");
-        // Request Location Permission
-        requestLocationPermission();
         bt_central.setEnabled(false);
         bt_peripheral.setEnabled(false);
+        // Request Location Permission
+        requestLocationPermission();
     }
 
     @Override
@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
             if (enable) {
                 if (!bluetoothAdapter.isEnabled()) {
                     bluetoothAdapter.enable();
+                } else{
+                    bt_central.setEnabled(true);
+                    bt_peripheral.setEnabled(true);
                 }
             } else {
                 if (!bluetoothAdapter.isEnabled()) {
