@@ -17,6 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
+
 public class PeripheralActivity extends AppCompatActivity {
     private Button bt_startAdvertise;
     private EditText tv_name;
@@ -24,7 +28,8 @@ public class PeripheralActivity extends AppCompatActivity {
     private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
     private String TAG = "PeripheralActivity";
     private boolean mAdvertise;
-    private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString("00000118-0000-1000-8000-00805f9b34fc");
+    private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString("00000118-0000-1000-8000-00805f9b34fb");
+    private int modelId = 0xABCDEF;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +104,10 @@ public class PeripheralActivity extends AppCompatActivity {
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
         mDataBuilder.setIncludeDeviceName(false);
         mDataBuilder.setIncludeTxPowerLevel(true);
-        mDataBuilder.addServiceUuid(mOpServiceUUID);
+        ByteBuffer modelIdBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(
+                modelId);
+        byte[] fastPairServiceData = Arrays.copyOfRange(modelIdBytes.array(), 0, 3);
+        mDataBuilder.addServiceData(mOpServiceUUID,fastPairServiceData);
         AdvertiseData mData = mDataBuilder.build();
         mBluetoothLeAdvertiser.startAdvertising(mSettings,mData,mAdvertiseCallback);
     }

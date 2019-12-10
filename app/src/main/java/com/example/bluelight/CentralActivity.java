@@ -38,7 +38,7 @@ public class CentralActivity extends AppCompatActivity {
     private List<BluetoothDevice> deviceList;
     private DeviceListAdapter mDeviceList;
     private boolean mScan;
-    private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString("00000118-0000-1000-8000-00805f9b34fc");
+    private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString(/*"3F1BA650-8F85-4C45-9673-833E6DE03E1B"*/"00000118-0000-1000-8000-00805f9b34fb");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,19 +59,21 @@ public class CentralActivity extends AppCompatActivity {
         @Override
         public void onClick(View V){
             if(mScan){
-                bt_scan.setText(R.string.start_scan);
+                Log.d(TAG, "stop Scanning");
                 stopScanning();
                 mScan = false;
+                bt_scan.setText(R.string.start_scan);
             } else {
-                bt_scan.setText(R.string.stop_scan);
-                mScan = true;
+                Log.d(TAG, "start Scanning");
+                deviceList.clear();
                 byte[] fiterdata = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
                 byte[] fitermark = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
                 List<ScanFilter> bleScanFilter = new ArrayList<>();
-                bleScanFilter.add(new ScanFilter.Builder().setServiceData(mOpServiceUUID,fiterdata,
-                        fitermark).build());
+                bleScanFilter.add(new ScanFilter.Builder().setServiceData(mOpServiceUUID,fiterdata,fitermark).build());
                 mBluetoothLeScanner.startScan(bleScanFilter, new ScanSettings.Builder().
                         setScanMode(ScanSettings.SCAN_MODE_BALANCED).build(), mScanCallback);
+                bt_scan.setText(R.string.stop_scan);
+                mScan = true;
             }
 
         }
@@ -84,17 +86,17 @@ public class CentralActivity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
 
             Log.d(TAG,"scan result: " + result.getDevice().getAddress() + " rssi "
-                    + result.getRssi() + " name " + result.getDevice().getName());
-            if(result.getDevice().getName() != null){
+                    + result.getRssi() + " name " + result.getDevice().getName() + "UUID: Service DATA: " + toHexString(result.getScanRecord().getServiceData(mOpServiceUUID)));
+            //if(result.getDevice().getName() != null){
                 if(!deviceList.contains(result.getDevice())){
                     deviceList.add(result.getDevice());
                     updatelist();
                 } else{
                     Log.d(TAG,"Device already added");
                 }
-            } else{
-                Log.d(TAG,"Name is not avaialble");
-            }
+            /*} else{
+                Log.d(TAG,"Name is not available");
+            }*/
 
         }
     };
@@ -125,6 +127,25 @@ public class CentralActivity extends AppCompatActivity {
         if(mBluetoothLeScanner != null) {
             mBluetoothLeScanner.stopScan(mScanCallback);
         }
+        deviceList.clear();
         super.onDestroy();
+    }
+    public String toHexString(byte[] data) {
+        if (data == null) {
+            return null;
+        } else {
+            int len = data.length;
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < len; i++) {
+                sb.append("0x");
+                if ((data[i] & 0xFF) < 16) {
+                    sb.append("0" + Integer.toHexString(data[i] & 0xFF));
+                } else {
+                    sb.append(Integer.toHexString(data[i] & 0xFF));
+                }
+                sb.append(", ");
+            }
+            return sb.toString().toUpperCase();
+        }
     }
 }
