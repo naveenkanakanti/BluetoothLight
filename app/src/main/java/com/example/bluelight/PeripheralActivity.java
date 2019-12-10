@@ -29,7 +29,7 @@ public class PeripheralActivity extends AppCompatActivity {
     private String TAG = "PeripheralActivity";
     private boolean mAdvertise;
     private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString("00000118-0000-1000-8000-00805f9b34fb");
-    private int modelId = 0xABCDEF;
+    private int modelId = 0x0000000000002011;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,11 +102,11 @@ public class PeripheralActivity extends AppCompatActivity {
         mSettingsBuilder.setTimeout(0);
         AdvertiseSettings mSettings  = mSettingsBuilder.build();
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
-        mDataBuilder.setIncludeDeviceName(false);
+        mDataBuilder.setIncludeDeviceName(true);
         mDataBuilder.setIncludeTxPowerLevel(true);
         ByteBuffer modelIdBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(
                 modelId);
-        byte[] fastPairServiceData = Arrays.copyOfRange(modelIdBytes.array(), 0, 3);
+        byte[] fastPairServiceData = Arrays.copyOfRange(modelIdBytes.array(), 0, 8);
         mDataBuilder.addServiceData(mOpServiceUUID,fastPairServiceData);
         AdvertiseData mData = mDataBuilder.build();
         mBluetoothLeAdvertiser.startAdvertising(mSettings,mData,mAdvertiseCallback);
