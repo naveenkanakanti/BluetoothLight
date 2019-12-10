@@ -8,5 +8,9 @@
     <string name="transmitter_role">Transmitter Role</string>
     <string name="title_activity_central">CentralActivity</string>
     <string name="start_scan">start scan</string>
+    <string name="stop_scan">stop scan</string>
     <string name="title_activity_peripheral">PeripheralActivity</string>
+    <string name="peripheral_name">Peripheral Name</string>
+    <string name="start_advertisement">start Advertisement</string>
+    <string name="stop_advertisement">stop Advertisement</string>
 </resources>

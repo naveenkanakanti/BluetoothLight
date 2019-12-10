@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ public class CentralActivity extends AppCompatActivity {
     private BluetoothLeScanner mBluetoothLeScanner;
     private List<BluetoothDevice> deviceList;
     private DeviceListAdapter mDeviceList;
+    private boolean mScan;
+    private final ParcelUuid mOpServiceUUID = ParcelUuid.fromString("00000118-0000-1000-8000-00805f9b34fc");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,18 +52,33 @@ public class CentralActivity extends AppCompatActivity {
         mDeviceList = new DeviceListAdapter(this,R.layout.device_view,deviceList);
         lv_DeviceList.setAdapter(mDeviceList);
         lv_DeviceList.setOnItemClickListener(mItemClickListner);
+        mScan = false;
     }
 
     class scanOnClickListner implements View.OnClickListener{
         @Override
         public void onClick(View V){
-            List<ScanFilter> bleScanFilter = new ArrayList<>();
-            mBluetoothLeScanner.startScan(bleScanFilter , new ScanSettings.Builder().
-                    setScanMode(ScanSettings.SCAN_MODE_BALANCED).build() ,mScanCallback);
+            if(mScan){
+                bt_scan.setText(R.string.start_scan);
+                stopScanning();
+                mScan = false;
+            } else {
+                bt_scan.setText(R.string.stop_scan);
+                mScan = true;
+                byte[] fiterdata = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+                byte[] fitermark = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+                List<ScanFilter> bleScanFilter = new ArrayList<>();
+                bleScanFilter.add(new ScanFilter.Builder().setServiceData(mOpServiceUUID,fiterdata,
+                        fitermark).build());
+                mBluetoothLeScanner.startScan(bleScanFilter, new ScanSettings.Builder().
+                        setScanMode(ScanSettings.SCAN_MODE_BALANCED).build(), mScanCallback);
+            }
 
         }
     }
-
+    private void stopScanning(){
+        mBluetoothLeScanner.stopScan(mScanCallback);
+    }
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -83,6 +101,7 @@ public class CentralActivity extends AppCompatActivity {
 
 
     private void updatelist(){
+
         mDeviceList.updateList(deviceList);
     }
 
@@ -93,4 +112,19 @@ public class CentralActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onStop() {
+        if(mBluetoothLeScanner != null) {
+            mBluetoothLeScanner.stopScan(mScanCallback);
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mBluetoothLeScanner != null) {
+            mBluetoothLeScanner.stopScan(mScanCallback);
+        }
+        super.onDestroy();
+    }
 }
