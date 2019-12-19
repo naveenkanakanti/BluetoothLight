@@ -66,10 +66,11 @@ public class CentralActivity extends AppCompatActivity {
             } else {
                 Log.d(TAG, "start Scanning");
                 deviceList.clear();
+                updatelist();
                 byte[] fiterdata = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
                 byte[] fitermark = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
                 List<ScanFilter> bleScanFilter = new ArrayList<>();
-                bleScanFilter.add(new ScanFilter.Builder().setServiceData(mOpServiceUUID,fiterdata,fitermark).build());
+                bleScanFilter.add(new ScanFilter.Builder().setServiceUuid(mOpServiceUUID).build());
                 mBluetoothLeScanner.startScan(bleScanFilter, new ScanSettings.Builder().
                         setScanMode(ScanSettings.SCAN_MODE_BALANCED).build(), mScanCallback);
                 bt_scan.setText(R.string.stop_scan);
